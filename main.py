@@ -1,7 +1,7 @@
 from PIL import Image
-from PyQt6.QtWidgets import QWidget, QApplication, QGridLayout, QPushButton, QVBoxLayout, QHBoxLayout
+from PyQt6.QtWidgets import QWidget, QApplication, QGridLayout, QPushButton, QVBoxLayout, QHBoxLayout, QFrame, QSpacerItem, QLineEdit, QTextEdit
 from PyQt6.QtGui import QScreen
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import Qt, QRect
 import sys
 
 def main():
@@ -34,27 +34,48 @@ class main_window(QWidget):
         self.y = self.screen_rect[0].geometry().center().y()-int(self.height/2) if len(self.screen_rect) == 1 else 0
         self.setGeometry(self.x,self.y,self.width,self.height)
 
-        self.css = '''
+        with open('css/style.css', 'r') as f:
+            self.css = f.read()
 
-        QHBoxLayout#tab_layout{
-        border: solid black 3px;
-        }
-
-        '''
-
-        self.setStyleSheet(css.self.css)
+        self.setStyleSheet(self.css)
 
         self.encode_tab = QPushButton("Encode")
+        self.encode_tab.setObjectName("en_tab")
         self.decode_tab = QPushButton("Decode")
+        self.space = QSpacerItem(int(self.width/2), 50)
 
         self.main_layout = QVBoxLayout(self)
+
+        self.frame = QFrame()
+        self.frame.setFrameRect(QRect(0, 0, self.width, self.height-50))
 
         self.tab_layout = QHBoxLayout()
         self.tab_layout.setObjectName('tab_layout')
         self.tab_layout.addWidget(self.encode_tab)
         self.tab_layout.addWidget(self.decode_tab)
+        self.tab_layout.addSpacerItem(self.space)
+
+
+        ##Lower Layout
+        self.lower_layout = QGridLayout()
+        
+        self.pass_input = QLineEdit()
+        self.pin_input = QLineEdit()
+        self.code_button = QPushButton("Code")
+        self.imgs_frame = QFrame()
+        self.output_text = QTextEdit()
+
+        self.lower_layout.addWidget(self.pass_input, 0, 0, 1, 2)
+        self.lower_layout.addWidget(self.pin_input, 0, 3, 1, 2)
+        self.lower_layout.addWidget(self.code_button, 0, 6, 1, 2, Qt.AlignmentFlag.AlignCenter)
+        self.lower_layout.addWidget(self.imgs_frame, 1, 0, 5, 5)
+        self.lower_layout.addWidget(self.output_text, 1, 6, 5, 3)
+
+
 
         self.main_layout.addLayout(self.tab_layout)
+        self.main_layout.addLayout(self.lower_layout)
+
 
         
 
