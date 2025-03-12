@@ -42,6 +42,7 @@ class main_window(QWidget):
         self.encode_tab = QPushButton("Encode")
         self.encode_tab.setObjectName("en_tab")
         self.decode_tab = QPushButton("Decode")
+        self.decode_tab.setObjectName("en_tab")
         self.space = QSpacerItem(int(self.width/2), 50)
 
         self.main_layout = QVBoxLayout(self)
@@ -50,7 +51,6 @@ class main_window(QWidget):
         self.frame.setFrameRect(QRect(0, 0, self.width, self.height-50))
 
         self.tab_layout = QHBoxLayout()
-        self.tab_layout.setObjectName('tab_layout')
         self.tab_layout.addWidget(self.encode_tab)
         self.tab_layout.addWidget(self.decode_tab)
         self.tab_layout.addSpacerItem(self.space)
