@@ -4,6 +4,7 @@ from PyQt6.QtGui import QScreen
 from PyQt6.QtCore import Qt, QRect
 import sys
 
+
 def main():
     img = Image.open("test_imgs/1.jpg")
     img_size = img.size
@@ -37,13 +38,19 @@ class main_window(QWidget):
         with open('css/style.css', 'r') as f:
             self.css = f.read()
 
+        self.active_tab_css = "QPushButton{ height:50px;  width:100%; background-color:white;}"
+        self.inactive_tab_css = "QPushButton{ height:50px;  width:100%; background-color: rgb(94, 94, 94);}"
+
         self.setStyleSheet(self.css)
 
-        self.encode_tab = QPushButton("Encode")
-        self.encode_tab.setObjectName("en_tab")
-        self.decode_tab = QPushButton("Decode")
-        self.decode_tab.setObjectName("en_tab")
+        self.encode_tab_butt = QPushButton("Encode")
+        self.decode_tab_butt = QPushButton("Decode")
+        self.decode_tab_butt.setStyleSheet(self.inactive_tab_css)
+        self.encode_tab_butt.setStyleSheet(self.active_tab_css)
         self.space = QSpacerItem(int(self.width/2), 50)
+
+        self.encode_tab_butt.clicked.connect(self.encode_tab)
+        self.decode_tab_butt.clicked.connect(self.decode_tab)
 
         self.main_layout = QVBoxLayout(self)
 
@@ -51,8 +58,8 @@ class main_window(QWidget):
         self.frame.setFrameRect(QRect(0, 0, self.width, self.height-50))
 
         self.tab_layout = QHBoxLayout()
-        self.tab_layout.addWidget(self.encode_tab)
-        self.tab_layout.addWidget(self.decode_tab)
+        self.tab_layout.addWidget(self.encode_tab_butt)
+        self.tab_layout.addWidget(self.decode_tab_butt)
         self.tab_layout.addSpacerItem(self.space)
 
 
@@ -72,9 +79,23 @@ class main_window(QWidget):
         self.lower_layout.addWidget(self.output_text, 1, 6, 5, 3)
 
 
-
         self.main_layout.addLayout(self.tab_layout)
         self.main_layout.addLayout(self.lower_layout)
+
+
+    def decode_tab(self):
+        print("decode")
+        self.decode_tab_butt.setStyleSheet(self.active_tab_css)
+        self.encode_tab_butt.setStyleSheet(self.inactive_tab_css)
+            #self.decode_tab_butt.setStyleSheet("QPushButton{background-color: rgb(94, 94, 94);}")
+            #self.encode_tab_butt.setStyleSheet("QPushButton{background-color: rgb(94, 94, 94);}")
+            
+
+    def encode_tab(self):
+        print("encode")
+        self.encode_tab_butt.setStyleSheet(self.active_tab_css)
+        self.decode_tab_butt.setStyleSheet(self.inactive_tab_css)
+            
 
 
         

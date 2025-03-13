@@ -2,8 +2,13 @@
 QWidget{
     border: 2px solid rgb(0, 0, 0);
 }
-QPushButton#en_tab{
+QPushButton#tab{
     height:50px;
     width:100%;
-    margin-top:-5px;
+}
+
+QPushButton#tab_inactive{
+    height:50px;
+    width:100%;
+    background-color: rgb(94, 94, 94);
 }
