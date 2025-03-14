@@ -1,6 +1,5 @@
-
 QWidget{
-    border: 2px solid rgb(0, 0, 0);
+    background-color: white;
 }
 QPushButton#tab{
     height:50px;

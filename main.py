@@ -1,6 +1,6 @@
 from PIL import Image
-from PyQt6.QtWidgets import QWidget, QApplication, QGridLayout, QPushButton, QVBoxLayout, QHBoxLayout, QFrame, QSpacerItem, QLineEdit, QTextEdit
-from PyQt6.QtGui import QScreen
+from PyQt6.QtWidgets import QWidget, QApplication, QGridLayout, QPushButton, QVBoxLayout, QHBoxLayout, QLabel, QFrame, QSpacerItem, QLineEdit, QTextEdit
+from PyQt6.QtGui import QScreen, QPixmap
 from PyQt6.QtCore import Qt, QRect
 import sys
 
@@ -29,8 +29,8 @@ class main_window(QWidget):
                 s.geometry().y() == 0
                 , QApplication.screens()))
 
-        self.width = 1000
-        self.height = 570
+        self.width = 1600
+        self.height = 900
         self.x = self.screen_rect[0].geometry().center().x()-int(self.width/2) if len(self.screen_rect) == 1 else 0
         self.y = self.screen_rect[0].geometry().center().y()-int(self.height/2) if len(self.screen_rect) == 1 else 0
         self.setGeometry(self.x,self.y,self.width,self.height)
@@ -63,28 +63,59 @@ class main_window(QWidget):
         self.tab_layout.addSpacerItem(self.space)
 
 
-        ##Lower Layout
-        self.lower_layout = QGridLayout()
-        
-        self.pass_input = QLineEdit()
-        self.pin_input = QLineEdit()
-        self.code_button = QPushButton("Code")
-        self.imgs_frame = QFrame()
-        self.output_text = QTextEdit()
-
-        self.lower_layout.addWidget(self.pass_input, 0, 0, 1, 2)
-        self.lower_layout.addWidget(self.pin_input, 0, 3, 1, 2)
-        self.lower_layout.addWidget(self.code_button, 0, 6, 1, 2, Qt.AlignmentFlag.AlignCenter)
-        self.lower_layout.addWidget(self.imgs_frame, 1, 0, 5, 5)
-        self.lower_layout.addWidget(self.output_text, 1, 6, 5, 3)
+        self.lower_layout = self.generate_encode_low_layout()
 
 
         self.main_layout.addLayout(self.tab_layout)
         self.main_layout.addLayout(self.lower_layout)
 
 
+    def generate_decode_low_layout(self):
+        layout = QGridLayout()
+        pass_input = QLineEdit()
+        pin_input = QLineEdit()
+        code_button = QPushButton("Code")
+        imgs_frame = QFrame()
+        output_text = QTextEdit()
+
+        layout.addWidget(pass_input, 0, 0, 1, 2)
+        layout.addWidget(pin_input, 0, 3, 1, 2)
+        layout.addWidget(code_button, 0, 6, 1, 2, Qt.AlignmentFlag.AlignCenter)
+        layout.addWidget(imgs_frame, 1, 0, 5, 5)
+        layout.addWidget(output_text, 1, 6, 5, 3)
+        return layout
+
+    def generate_encode_low_layout(self):
+        layout = QGridLayout()
+
+        #pass_input
+        pass_input = QLineEdit()
+        pass_label = QLabel("Password:")
+
+        #image_input
+        img_display = QLabel()
+        pixmap = QPixmap("test_imgs/1.jpg")
+        img_display.setPixmap(pixmap.scaledToHeight(250))
+        img_display.resize(25, 25)
+
+        #string_input
+        str_input = QTextEdit()
+       
+        #pin_output
+        pin_output = QLineEdit()
+        pin_output.setReadOnly(True)
+
+        layout.addWidget(pass_label, 0, 0, 1, 1)
+        layout.addWidget(pass_input, 0, 1, 1, 1)
+        layout.addWidget(str_input, 1, 0, 1, 2)
+        layout.addWidget(img_display, 1, 2, 1, 2)
+
+        return layout
+
+
+
+
     def decode_tab(self):
-        print("decode")
         self.decode_tab_butt.setStyleSheet(self.active_tab_css)
         self.encode_tab_butt.setStyleSheet(self.inactive_tab_css)
             #self.decode_tab_butt.setStyleSheet("QPushButton{background-color: rgb(94, 94, 94);}")
@@ -92,7 +123,6 @@ class main_window(QWidget):
             
 
     def encode_tab(self):
-        print("encode")
         self.encode_tab_butt.setStyleSheet(self.active_tab_css)
         self.decode_tab_butt.setStyleSheet(self.inactive_tab_css)
             
