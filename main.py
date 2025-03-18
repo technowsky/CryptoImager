@@ -1,8 +1,9 @@
 from PIL import Image
-from PyQt6.QtWidgets import QWidget, QApplication, QGridLayout, QPushButton, QVBoxLayout, QHBoxLayout, QLabel, QFrame, QSpacerItem, QLineEdit, QTextEdit
+from PyQt6.QtWidgets import QWidget, QApplication, QGridLayout, QPushButton, QVBoxLayout, QHBoxLayout, QLabel, QFrame, QSpacerItem, QLineEdit, QTextEdit, QStackedWidget
 from PyQt6.QtGui import QScreen, QPixmap
 from PyQt6.QtCore import Qt, QRect
 import sys
+import hashlib
 
 
 def main():
@@ -35,13 +36,10 @@ class main_window(QWidget):
         self.y = self.screen_rect[0].geometry().center().y()-int(self.height/2) if len(self.screen_rect) == 1 else 0
         self.setGeometry(self.x,self.y,self.width,self.height)
 
-        with open('css/style.css', 'r') as f:
-            self.css = f.read()
-
         self.active_tab_css = "QPushButton{ height:50px;  width:100%; background-color:white;}"
         self.inactive_tab_css = "QPushButton{ height:50px;  width:100%; background-color: rgb(94, 94, 94);}"
+        #self.setStyleSheet("QWidget{border: thick double #32a1ce;}")
 
-        self.setStyleSheet(self.css)
 
         self.encode_tab_butt = QPushButton("Encode")
         self.decode_tab_butt = QPushButton("Decode")
@@ -54,20 +52,24 @@ class main_window(QWidget):
 
         self.main_layout = QVBoxLayout(self)
 
-        self.frame = QFrame()
-        self.frame.setFrameRect(QRect(0, 0, self.width, self.height-50))
-
         self.tab_layout = QHBoxLayout()
         self.tab_layout.addWidget(self.encode_tab_butt)
         self.tab_layout.addWidget(self.decode_tab_butt)
         self.tab_layout.addSpacerItem(self.space)
 
 
-        self.lower_layout = self.generate_encode_low_layout()
+        self.lower_layout = QStackedWidget()
+        decodeWidget = QWidget()
+        decodeWidget.setLayout(self.generate_decode_low_layout())
+        encodeWidget = QWidget()
+        encodeWidget.setLayout(self.generate_encode_low_layout())
 
+        self.lower_layout.addWidget(decodeWidget)
+        self.lower_layout.addWidget(encodeWidget)
 
         self.main_layout.addLayout(self.tab_layout)
-        self.main_layout.addLayout(self.lower_layout)
+        self.main_layout.addWidget(self.lower_layout)
+        
 
 
     def generate_decode_low_layout(self):
@@ -94,7 +96,8 @@ class main_window(QWidget):
 
         #image_input
         img_display = QLabel()
-        pixmap = QPixmap("test_imgs/1.jpg")
+        #img_display.clicked.connect(select_image)
+        pixmap = QPixmap("test_imgs/add_image_icon.png")
         img_display.setPixmap(pixmap.scaledToHeight(250))
         img_display.resize(25, 25)
 
@@ -105,28 +108,47 @@ class main_window(QWidget):
         pin_output = QLineEdit()
         pin_output.setReadOnly(True)
 
-        layout.addWidget(pass_label, 0, 0, 1, 1)
-        layout.addWidget(pass_input, 0, 1, 1, 1)
-        layout.addWidget(str_input, 1, 0, 1, 2)
-        layout.addWidget(img_display, 1, 2, 1, 2)
+        code_butt = QPushButton("Code")
+        code_butt.clicked.connect(lambda: self.encode_password(pass_input))    #output_label
+
+        output_label = QLabel("Output data:")
+
+        child_layout_1 = QHBoxLayout()
+        child_layout_1.addWidget(pass_label)
+        child_layout_1.addWidget(pass_input)
+
+        child_layout_2 = QHBoxLayout()
+        child_layout_2.addWidget(str_input)
+        child_layout_2.addWidget(img_display)
+        
+        output_layout = QVBoxLayout()
+        output_layout.addWidget(output_label, alignment=Qt.AlignmentFlag.AlignTop)
+        output_layout.addWidget(pin_output, alignment=Qt.AlignmentFlag.AlignTop)
+
+        child_layout_2.addLayout(output_layout)
+
+        layout.addLayout(child_layout_1, 0, 0)
+        layout.addLayout(child_layout_2, 1, 0)
+        layout.addWidget(code_butt, 2, 0, 1, 3)
 
         return layout
-
-
-
 
     def decode_tab(self):
         self.decode_tab_butt.setStyleSheet(self.active_tab_css)
         self.encode_tab_butt.setStyleSheet(self.inactive_tab_css)
-            #self.decode_tab_butt.setStyleSheet("QPushButton{background-color: rgb(94, 94, 94);}")
-            #self.encode_tab_butt.setStyleSheet("QPushButton{background-color: rgb(94, 94, 94);}")
-            
+        self.lower_layout.setCurrentIndex(0)
 
     def encode_tab(self):
         self.encode_tab_butt.setStyleSheet(self.active_tab_css)
         self.decode_tab_butt.setStyleSheet(self.inactive_tab_css)
-            
+        self.lower_layout.setCurrentIndex(1)
 
+    def encode_password(self, pass_wig):
+        password = pass_wig.text()
+        md5_pass = hashlib.md5(password.encode()).hexdigest()
+        print(md5_pass)
+        
+            
 
         
 

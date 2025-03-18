@@ -1,13 +1,3 @@
 QWidget{
-    background-color: white;
-}
-QPushButton#tab{
-    height:50px;
-    width:100%;
-}
-
-QPushButton#tab_inactive{
-    height:50px;
-    width:100%;
-    background-color: rgb(94, 94, 94);
+    border: thick double #32a1ce;
 }
