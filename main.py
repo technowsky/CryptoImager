@@ -3,7 +3,7 @@ from PyQt6.QtWidgets import QWidget, QApplication, QGridLayout, QPushButton, QVB
 from PyQt6.QtGui import QScreen, QPixmap
 from PyQt6.QtCore import Qt, QRect
 import sys
-import hashlib
+from classes.encoder import *
 
 
 def main():
@@ -109,7 +109,7 @@ class main_window(QWidget):
         pin_output.setReadOnly(True)
 
         code_butt = QPushButton("Code")
-        code_butt.clicked.connect(lambda: self.encode_password(pass_input))    #output_label
+        code_butt.clicked.connect(lambda: self.encode_password(pass_input, str_input))    #output_label
 
         output_label = QLabel("Output data:")
 
@@ -143,11 +143,13 @@ class main_window(QWidget):
         self.decode_tab_butt.setStyleSheet(self.inactive_tab_css)
         self.lower_layout.setCurrentIndex(1)
 
-    def encode_password(self, pass_wig):
+    def encode_password(self, pass_wig, text_wig):
+        text = text_wig.toPlainText()
         password = pass_wig.text()
-        md5_pass = hashlib.md5(password.encode()).hexdigest()
-        print(md5_pass)
-        
+        hashed_p = Encoder._pass_to_hash(password)
+        hashed_vi = Encoder._get_VI(password)
+        print(Encoder._aes_encode(hashed_p.encode(), hashed_vi.encode(), text.encode()))
+    
             
 
         
