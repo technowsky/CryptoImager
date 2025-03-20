@@ -4,6 +4,7 @@ from PyQt6.QtGui import QScreen, QPixmap
 from PyQt6.QtCore import Qt, QRect
 import sys
 from classes.encoder import *
+from classes.decoder import *
 
 
 def main():
@@ -59,13 +60,13 @@ class main_window(QWidget):
 
 
         self.lower_layout = QStackedWidget()
-        decodeWidget = QWidget()
-        decodeWidget.setLayout(self.generate_decode_low_layout())
         encodeWidget = QWidget()
         encodeWidget.setLayout(self.generate_encode_low_layout())
+        decodeWidget = QWidget()
+        decodeWidget.setLayout(self.generate_decode_low_layout())
 
-        self.lower_layout.addWidget(decodeWidget)
         self.lower_layout.addWidget(encodeWidget)
+        self.lower_layout.addWidget(decodeWidget)
 
         self.main_layout.addLayout(self.tab_layout)
         self.main_layout.addWidget(self.lower_layout)
@@ -136,19 +137,21 @@ class main_window(QWidget):
     def decode_tab(self):
         self.decode_tab_butt.setStyleSheet(self.active_tab_css)
         self.encode_tab_butt.setStyleSheet(self.inactive_tab_css)
-        self.lower_layout.setCurrentIndex(0)
+        self.lower_layout.setCurrentIndex(1)
 
     def encode_tab(self):
         self.encode_tab_butt.setStyleSheet(self.active_tab_css)
         self.decode_tab_butt.setStyleSheet(self.inactive_tab_css)
-        self.lower_layout.setCurrentIndex(1)
+        self.lower_layout.setCurrentIndex(0)
 
     def encode_password(self, pass_wig, text_wig):
         text = text_wig.toPlainText()
         password = pass_wig.text()
         hashed_p = Encoder._pass_to_hash(password)
         hashed_vi = Encoder._get_VI(password)
-        print(Encoder._aes_encode(hashed_p.encode(), hashed_vi.encode(), text.encode()))
+        encoded_text = Encoder._aes_encode_b(hashed_p.encode(), hashed_vi.encode(), text.encode())
+        print(encoded_text)
+        print(Decoder._aes_decode_b(hashed_p.encode(), hashed_vi.encode(), encoded_text))
     
             
 

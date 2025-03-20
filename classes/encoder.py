@@ -4,38 +4,31 @@ from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 class Encoder:
 
     @staticmethod
-    def encode(image, text, password):
+    def encode(image, text:str, password:str):
         pass
     
     @staticmethod
-    def encode(images:list, texts:list, password):
+    def encode(images:list, texts:list, password:str):
         pass
 
     @staticmethod
-    def _pad(data:bytes):
+    def _pad(data:bytes) -> bytes:
         padding_length = 16 - len(data) % 16
         padding = bytes([padding_length] * padding_length)
         return data + padding
-
-    @staticmethod
-    def _unpad(data:bytes):
-        padding_length = data[-1]
-        if padding_length < 1 or padding_length > 16:
-            raise ValueError("Invalid padding encountered")
-        return data[:-padding_length]
     
     @staticmethod
-    def _pass_to_hash(password):
+    def _pass_to_hash(password:str) -> str:
         hash_pass = hashlib.md5(password.encode()).hexdigest()
         return hash_pass
 
     @staticmethod
-    def _get_VI(password):
+    def _get_VI(password:str) -> str:
         hash_vi = hashlib.blake2s(str(len(password)).encode(), digest_size=8).hexdigest()
         return hash_vi
 
     @staticmethod
-    def _aes_encode(key:bytes, vi:bytes, text:bytes):
+    def _aes_encode_b(key:bytes, vi:bytes, text:bytes) -> bytes:
         
         #print(len(''.join(f'{z:08b}' for z in key.encode())))
         #print(len(''.join(f'{z:08b}' for z in vi.encode())))
@@ -53,7 +46,7 @@ class Encoder:
         #print(Encoder._unpad(decoded_text))
 #
     @staticmethod
-    def _aes_encode(key:str, vi:str, text:str):
+    def _aes_encode_s(key:str, vi:str, text:str) -> bytes:
 
         b_key = key.encode()
         b_vi = vi.encode()
