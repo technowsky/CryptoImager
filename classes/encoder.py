@@ -8,7 +8,7 @@ class Encoder:
         pass
     
     @staticmethod
-    def encode(images:list, texts:list, password:str):
+    def encode_multiple(images:list, texts:list, password:str):
         pass
 
     @staticmethod
@@ -61,3 +61,7 @@ class Encoder:
         encoded_text = encryptor.update(b_text) + encryptor.finalize()
 
         return encoded_text
+
+    @staticmethod
+    def _to_bits(data:bytes) -> str:
+        return ''.join([format(b, '08b') for b in data])

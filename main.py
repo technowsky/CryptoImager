@@ -151,6 +151,8 @@ class main_window(QWidget):
         hashed_vi = Encoder._get_VI(password)
         encoded_text = Encoder._aes_encode_b(hashed_p.encode(), hashed_vi.encode(), text.encode())
         print(encoded_text)
+        print(Encoder._to_bits(encoded_text))
+        print(Decoder._from_bits(Encoder._to_bits(encoded_text)))
         print(Decoder._aes_decode_b(hashed_p.encode(), hashed_vi.encode(), encoded_text))
     
             

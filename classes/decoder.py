@@ -8,7 +8,7 @@ class Decoder:
         pass
     
     @staticmethod
-    def decode(images:list, password:str):
+    def decode_multiple(images:list, password:str):
         pass
 
     @staticmethod
@@ -28,3 +28,18 @@ class Decoder:
         output_str = Decoder._unpad(decoded_text)
 
         return output_str.decode("utf-8")
+
+    @staticmethod
+    def _from_bits(data:str) -> bytes:
+        data_to_cut = data
+        bytes_tab = []
+        print(len(data))
+        print(len(data) % 8 == 0)
+        while len(data_to_cut) > 0 and len(data_to_cut) % 8 == 0:
+            
+            bytes_tab.append(data_to_cut[:8])
+            data_to_cut = data_to_cut[8:]
+
+        print(bytes_tab)
+
+        return bytes()
