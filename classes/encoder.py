@@ -1,3 +1,4 @@
+from bitarray import bitarray
 import hashlib
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 
@@ -65,3 +66,9 @@ class Encoder:
     @staticmethod
     def _to_bits(data:bytes) -> str:
         return ''.join([format(b, '08b') for b in data])
+
+    @staticmethod
+    def _to_bitarr(data:bytes) -> bitarray:
+        ba = bitarray()
+        ba.frombytes(data)
+        return ba

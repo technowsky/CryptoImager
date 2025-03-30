@@ -1,3 +1,4 @@
+from bitarray import bitarray
 import hashlib
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 
@@ -36,10 +37,13 @@ class Decoder:
         print(len(data))
         print(len(data) % 8 == 0)
         while len(data_to_cut) > 0 and len(data_to_cut) % 8 == 0:
-            
             bytes_tab.append(data_to_cut[:8])
             data_to_cut = data_to_cut[8:]
 
         print(bytes_tab)
 
         return bytes()
+
+    @staticmethod
+    def _from_bitarr(data:bitarray) -> bytes:
+        return data.tobytes()
