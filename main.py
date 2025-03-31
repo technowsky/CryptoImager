@@ -5,6 +5,7 @@ from PyQt6.QtCore import Qt, QRect
 import sys
 from classes.encoder import *
 from classes.decoder import *
+from classes.widgets.dropArea import *
 
 
 def main():
@@ -36,6 +37,8 @@ class main_window(QWidget):
         self.x = self.screen_rect[0].geometry().center().x()-int(self.width/2) if len(self.screen_rect) == 1 else 0
         self.y = self.screen_rect[0].geometry().center().y()-int(self.height/2) if len(self.screen_rect) == 1 else 0
         self.setGeometry(self.x,self.y,self.width,self.height)
+
+        #self.setAcceptDrops(True)
 
         self.active_tab_css = "QPushButton{ height:50px;  width:100%; background-color:white;}"
         self.inactive_tab_css = "QPushButton{ height:50px;  width:100%; background-color: rgb(94, 94, 94);}"
@@ -96,7 +99,7 @@ class main_window(QWidget):
         pass_label = QLabel("Password:")
 
         #image_input
-        img_display = QLabel()
+        img_display = dropArea()
         #img_display.clicked.connect(select_image)
         pixmap = QPixmap("test_imgs/add_image_icon.png")
         img_display.setPixmap(pixmap.scaledToHeight(250))
@@ -155,7 +158,13 @@ class main_window(QWidget):
         print(Decoder._from_bitarr(Encoder._to_bitarr(encoded_text)))
         print(Decoder._aes_decode_b(hashed_p.encode(), hashed_vi.encode(), encoded_text))
     
-            
+    def dropEvent(self, event):
+        if event.mimeData().hasImage:
+            print("Zdj")
+            event.accept()
+        else:
+            print("Coś innego")
+            event.ignore() 
 
         
 
