@@ -38,11 +38,8 @@ class main_window(QWidget):
         self.y = self.screen_rect[0].geometry().center().y()-int(self.height/2) if len(self.screen_rect) == 1 else 0
         self.setGeometry(self.x,self.y,self.width,self.height)
 
-        #self.setAcceptDrops(True)
-
         self.active_tab_css = "QPushButton{ height:50px;  width:100%; background-color:white;}"
         self.inactive_tab_css = "QPushButton{ height:50px;  width:100%; background-color: rgb(94, 94, 94);}"
-        #self.setStyleSheet("QWidget{border: thick double #32a1ce;}")
 
 
         self.encode_tab_butt = QPushButton("Encode")
@@ -125,7 +122,7 @@ class main_window(QWidget):
         child_layout_2.addWidget(str_input)
         child_layout_2.addWidget(img_display)
         
-        output_layout = QVBoxLayout()
+        output_layout = QHBoxLayout()
         output_layout.addWidget(output_label, alignment=Qt.AlignmentFlag.AlignTop)
         output_layout.addWidget(pin_output, alignment=Qt.AlignmentFlag.AlignTop)
 
@@ -157,16 +154,6 @@ class main_window(QWidget):
         print(Encoder._to_bitarr(encoded_text))
         print(Decoder._from_bitarr(Encoder._to_bitarr(encoded_text)))
         print(Decoder._aes_decode_b(hashed_p.encode(), hashed_vi.encode(), encoded_text))
-    
-    def dropEvent(self, event):
-        if event.mimeData().hasImage:
-            print("Zdj")
-            event.accept()
-        else:
-            print("Coś innego")
-            event.ignore() 
-
-        
 
 
 if __name__ == "__main__":
