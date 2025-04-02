@@ -24,7 +24,9 @@ class dropArea(QLabel):
     def dropEvent(self, event):
         if event.mimeData().hasImage:
             print(event.mimeData().urls()[0].path())
-            self.setPixmap(QPixmap(event.mimeData().urls()[0].path()))
+            img = QPixmap(event.mimeData().urls()[0].path())
+            print(img)
+            self.setPixmap(img.scaledToWidth(500))
             event.accept()
         else:
             print("nie zdj")

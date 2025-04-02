@@ -100,7 +100,6 @@ class main_window(QWidget):
         #img_display.clicked.connect(select_image)
         pixmap = QPixmap("test_imgs/add_image_icon.png")
         img_display.setPixmap(pixmap.scaledToHeight(250))
-        img_display.resize(25, 25)
 
         #string_input
         str_input = QTextEdit()
@@ -114,23 +113,18 @@ class main_window(QWidget):
 
         output_label = QLabel("Output data:")
 
-        child_layout_1 = QHBoxLayout()
+        child_layout_1 = QHBoxLayout()          #Password input layout
         child_layout_1.addWidget(pass_label)
         child_layout_1.addWidget(pass_input)
-
-        child_layout_2 = QHBoxLayout()
-        child_layout_2.addWidget(str_input)
-        child_layout_2.addWidget(img_display)
         
         output_layout = QHBoxLayout()
         output_layout.addWidget(output_label, alignment=Qt.AlignmentFlag.AlignTop)
         output_layout.addWidget(pin_output, alignment=Qt.AlignmentFlag.AlignTop)
 
-        child_layout_2.addLayout(output_layout)
-
-        layout.addLayout(child_layout_1, 0, 0)
-        layout.addLayout(child_layout_2, 1, 0)
-        layout.addWidget(code_butt, 2, 0, 1, 3)
+        layout.addLayout(child_layout_1, 0, 0, 1, 2)
+        layout.addWidget(str_input, 1, 0)
+        layout.addWidget(img_display, 1, 1)
+        layout.addWidget(code_butt, 2, 0, 1, 2)
 
         return layout
 
