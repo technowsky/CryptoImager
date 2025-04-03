@@ -104,14 +104,14 @@ class main_window(QWidget):
         #string_input
         str_input = QTextEdit()
        
-        #pin_output
+        output_label = QLabel("Output data:")
         pin_output = QLineEdit()
         pin_output.setReadOnly(True)
 
         code_butt = QPushButton("Code")
         code_butt.clicked.connect(lambda: self.encode_password(pass_input, str_input))    #output_label
 
-        output_label = QLabel("Output data:")
+        
 
         child_layout_1 = QHBoxLayout()          #Password input layout
         child_layout_1.addWidget(pass_label)
@@ -122,9 +122,11 @@ class main_window(QWidget):
         output_layout.addWidget(pin_output, alignment=Qt.AlignmentFlag.AlignTop)
 
         layout.addLayout(child_layout_1, 0, 0, 1, 2)
-        layout.addWidget(str_input, 1, 0)
-        layout.addWidget(img_display, 1, 1)
-        layout.addWidget(code_butt, 2, 0, 1, 2)
+        layout.addWidget(str_input, 1, 0, 2, 1)
+        layout.addWidget(img_display, 1, 1, 1, 4)
+        layout.addWidget(output_label, 2, 1)
+        layout.addWidget(pin_output, 2, 2)
+        layout.addWidget(code_butt, 3, 0, 1, 2)
 
         return layout
 

@@ -23,10 +23,12 @@ class dropArea(QLabel):
 
     def dropEvent(self, event):
         if event.mimeData().hasImage:
-            print(event.mimeData().urls()[0].path())
-            img = QPixmap(event.mimeData().urls()[0].path())
-            print(img)
-            self.setPixmap(img.scaledToWidth(500))
+            url = event.mimeData().urls()[0].path()
+            if url[0] == "/" or url [0] == "\\": url = url[1:]
+            img = QPixmap(url)
+            if img.width() > img.height(): img = img.scaledToWidth(self.width()-20)
+            else: img = img.scaledToHeight(self.height()-20)
+            self.setPixmap(img)
             event.accept()
         else:
             print("nie zdj")
