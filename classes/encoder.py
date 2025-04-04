@@ -1,12 +1,15 @@
 from bitarray import bitarray
 import hashlib
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
+from PyQt6.QtGui import QPixmap, QImage
 
 class Encoder:
 
     @staticmethod
     def encode(image, text:str, password:str):
-        pass
+        image = image.toImage()
+        print(type(image))
+        print(image.pixel(0,0))
     
     @staticmethod
     def encode_multiple(images:list, texts:list, password:str):

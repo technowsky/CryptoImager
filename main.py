@@ -109,7 +109,7 @@ class main_window(QWidget):
         pin_output.setReadOnly(True)
 
         code_butt = QPushButton("Code")
-        code_butt.clicked.connect(lambda: self.encode_password(pass_input, str_input))    #output_label
+        code_butt.clicked.connect(lambda: self.encode_password(pass_input, str_input, img_display))    #output_label
 
         
 
@@ -140,7 +140,7 @@ class main_window(QWidget):
         self.decode_tab_butt.setStyleSheet(self.inactive_tab_css)
         self.lower_layout.setCurrentIndex(0)
 
-    def encode_password(self, pass_wig, text_wig):
+    def encode_password(self, pass_wig, text_wig, img_wig):
         text = text_wig.toPlainText()
         password = pass_wig.text()
         hashed_p = Encoder._pass_to_hash(password)
@@ -148,8 +148,9 @@ class main_window(QWidget):
         encoded_text = Encoder._aes_encode_b(hashed_p.encode(), hashed_vi.encode(), text.encode())
         print(encoded_text)
         print(Encoder._to_bitarr(encoded_text))
-        print(Decoder._from_bitarr(Encoder._to_bitarr(encoded_text)))
-        print(Decoder._aes_decode_b(hashed_p.encode(), hashed_vi.encode(), encoded_text))
+        Encoder.encode(img_wig.pixmap(), "test", "test")
+        #print(Decoder._from_bitarr(Encoder._to_bitarr(encoded_text)))
+        #print(Decoder._aes_decode_b(hashed_p.encode(), hashed_vi.encode(), encoded_text))
 
 
 if __name__ == "__main__":
