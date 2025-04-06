@@ -7,9 +7,40 @@ class Encoder:
 
     @staticmethod
     def encode(image, text:str, password:str):
+        #encoding text with password before creating image
+
+        bit_text = Encoder._to_bitarr(text.encode())
+        #print(bit_text)
         image = image.toImage()
-        print(type(image))
-        print(image.pixel(0,0))
+
+        c = 0
+        i = 0
+
+        while c < len(bit_text):
+            rgb_int_values = image.pixelColor(i,i).getRgb()
+            for j, color in enumerate(rgb_int_values):
+                bit_color = Encoder._to_bitarr(bytes([color]))
+                #print("bit: ", bit_text[c+j])
+                #print("color: ", bit_color)
+                bit_color[-1] = bit_text[c+j]
+                print(bit_color.tobytes())
+                print(bit_color.to01())
+                print(int.from_bytes(bit_color.tobytes()))
+                #print("new color: ", bit_color)
+                #print() 
+            c += len(rgb_int_values)
+            i += 1
+
+
+
+
+
+        
+        #rgb_int_values = image.pixelColor(0,0).getRgb()
+        #print(rgb_int_values)
+        #
+        #print(rgb_bit_values)
+
     
     @staticmethod
     def encode_multiple(images:list, texts:list, password:str):
