@@ -1,6 +1,7 @@
 from PyQt6.QtWidgets import QLabel
 from PyQt6.QtGui import QPixmap
 from PyQt6.QtCore import Qt
+from classes.image import Image
 
 class dropArea(QLabel):
     def __init__(self):
@@ -15,6 +16,8 @@ class dropArea(QLabel):
         """)
         self.setAcceptDrops(True)
 
+        self.img = None
+
         
 
     def dragEnterEvent(self, event):
@@ -25,10 +28,10 @@ class dropArea(QLabel):
         if event.mimeData().hasImage:
             url = event.mimeData().urls()[0].path()
             if url[0] == "/" or url [0] == "\\": url = url[1:]
-            img = QPixmap(url)
-            if img.width() > img.height(): img = img.scaledToWidth(self.width()-20)
-            else: img = img.scaledToHeight(self.height()-20)
-            self.setPixmap(img)
+            self.img = Image(url)
+            if self.img.pixmap.width() > self.img.pixmap.height(): self.img.pixmap = self.img.pixmap.scaledToWidth(self.width()-20)
+            else: self.img.pixmap = self.img.pixmap.scaledToHeight(self.height()-20)
+            self.setPixmap(self.img.pixmap)
             event.accept()
         else:
             print("nie zdj")

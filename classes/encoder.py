@@ -1,35 +1,55 @@
 from bitarray import bitarray
 import hashlib
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
-from PyQt6.QtGui import QPixmap, QImage
+from PyQt6.QtGui import QPixmap, QImage, QColor
+from classes.image import Image
+import math
 
 class Encoder:
 
     @staticmethod
     def encode(image, text:str, password:str):
         #encoding text with password before creating image
-
+        text += "ﬣ"
         bit_text = Encoder._to_bitarr(text.encode())
+        print("ﬣ".encode())
         #print(bit_text)
-        image = image.toImage()
 
         c = 0
         i = 0
 
         while c < len(bit_text):
-            rgb_int_values = image.pixelColor(i,i).getRgb()
+            rgb_int_values = image.image.pixelColor(i,i).getRgb()
+            rgb_new_int_values = []
+            #print(rgb_int_values)
             for j, color in enumerate(rgb_int_values):
                 bit_color = Encoder._to_bitarr(bytes([color]))
                 #print("bit: ", bit_text[c+j])
                 #print("color: ", bit_color)
                 bit_color[-1] = bit_text[c+j]
-                print(bit_color.tobytes())
-                print(bit_color.to01())
-                print(int.from_bytes(bit_color.tobytes()))
+                rgb_new_int_values.append(int.from_bytes(bit_color.tobytes()))
+                #print(bit_color.tobytes())
+                #print(bit_color.to01())
+                #print(int.from_bytes(bit_color.tobytes()))
                 #print("new color: ", bit_color)
-                #print() 
+                #print()
+            
+            new_qcolor = QColor(*tuple(rgb_new_int_values))
+            image.image.setPixelColor(i, i, new_qcolor)
+            #print(tuple(rgb_new_int_values))
+            #print()
             c += len(rgb_int_values)
             i += 1
+
+        image.image.save(image.name+"_crypted."+image.format, quality=100)
+
+        #decrypt test
+
+        coded_image = QImage(image.name+"_crypted."+image.format)
+        max_bits_size = math.floor(math.sqrt((pow(coded_image.width(), 2) + pow(coded_image.height(), 2))))
+
+        
+
 
 
 

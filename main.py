@@ -148,7 +148,7 @@ class main_window(QWidget):
         encoded_text = Encoder._aes_encode_b(hashed_p.encode(), hashed_vi.encode(), text.encode())
         print(encoded_text)
         print(Encoder._to_bitarr(encoded_text))
-        Encoder.encode(img_wig.pixmap(), "test", "test")
+        Encoder.encode(img_wig.img, "test", "test")
         #print(Decoder._from_bitarr(Encoder._to_bitarr(encoded_text)))
         #print(Decoder._aes_decode_b(hashed_p.encode(), hashed_vi.encode(), encoded_text))
 
