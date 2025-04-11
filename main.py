@@ -6,6 +6,7 @@ import sys
 from classes.encoder import *
 from classes.decoder import *
 from classes.widgets.dropArea import *
+from classes.image import *
 
 
 def main():
@@ -98,8 +99,8 @@ class main_window(QWidget):
         #image_input
         img_display = dropArea()
         #img_display.clicked.connect(select_image)
-        pixmap = QPixmap("test_imgs/add_image_icon.png")
-        img_display.setPixmap(pixmap.scaledToHeight(250))
+        img_display.img = Image("test_imgs/add_image_icon.png")
+        img_display.setPixmap(img_display.img.pixmap.scaledToHeight(250))
 
         #string_input
         str_input = QTextEdit()

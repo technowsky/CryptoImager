@@ -15,9 +15,16 @@ class Encoder:
         print("ﬣ".encode())
         #print(bit_text)
 
+        max_bits_size = math.floor(math.sqrt((pow(image.image.width(), 2) + pow(image.image.height(), 2))))
+        print(max_bits_size)
+        print(len(bit_text))
+        if max_bits_size < len(bit_text):
+            print("Image is not big enough to encode that long text. Select bigger image")
+            return False
+        
+
         c = 0
         i = 0
-
         while c < len(bit_text):
             rgb_int_values = image.image.pixelColor(i,i).getRgb()
             rgb_new_int_values = []
@@ -47,8 +54,25 @@ class Encoder:
 
         coded_image = QImage(image.name+"_crypted."+image.format)
         max_bits_size = math.floor(math.sqrt((pow(coded_image.width(), 2) + pow(coded_image.height(), 2))))
-
         
+        i = 0
+        bits_arr = []
+        while i <= max_bits_size:
+            rgb_int_values = coded_image.pixelColor(i,i).getRgb()
+            rgb_new_int_values = []
+            #print(rgb_int_values)
+            for j, color in enumerate(rgb_int_values):
+                bit_color = Encoder._to_bitarr(bytes([color]))
+                #print("bit: ", bit_text[c+j])
+                #print("color: ", bit_color)
+                bits_arr.append(bit_color[-1])
+                #print(bit_color.tobytes())
+                #print(bit_color.to01())
+                #print(int.from_bytes(bit_color.tobytes()))
+                #print("new color: ", bit_color)
+                #print()
+
+
 
 
 
