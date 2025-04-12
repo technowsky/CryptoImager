@@ -8,7 +8,7 @@ class Image:
         self.image = QImage(url)
         
 
-        print(self.url, self.name, self.format)
+        #print(self.url, self.name, self.format)
 
 
     def _get_file_str(self, url):

@@ -10,14 +10,15 @@ class Encoder:
     @staticmethod
     def encode(image, text:str, password:str):
         #encoding text with password before creating image
-        text += "ﬣ"
+        end_char = "ﬣ"
+        text += end_char
         bit_text = Encoder._to_bitarr(text.encode())
-        print("ﬣ".encode())
-        #print(bit_text)
+        print(text)
+        print(bit_text)
 
         max_bits_size = math.floor(math.sqrt((pow(image.image.width(), 2) + pow(image.image.height(), 2))))
-        print(max_bits_size)
-        print(len(bit_text))
+        #print(max_bits_size)
+        #print(len(bit_text))
         if max_bits_size < len(bit_text):
             print("Image is not big enough to encode that long text. Select bigger image")
             return False
@@ -54,24 +55,27 @@ class Encoder:
 
         coded_image = QImage(image.name+"_crypted."+image.format)
         max_bits_size = math.floor(math.sqrt((pow(coded_image.width(), 2) + pow(coded_image.height(), 2))))
+        print(coded_image.width(), coded_image.height())
         
+        gather_flag = True
+
         i = 0
-        bits_arr = []
-        while i <= max_bits_size:
+        bits_arr = bitarray()
+        while gather_flag:
             rgb_int_values = coded_image.pixelColor(i,i).getRgb()
-            rgb_new_int_values = []
-            #print(rgb_int_values)
             for j, color in enumerate(rgb_int_values):
                 bit_color = Encoder._to_bitarr(bytes([color]))
-                #print("bit: ", bit_text[c+j])
-                #print("color: ", bit_color)
+                #bits_arr += str(bit_color[-1])
                 bits_arr.append(bit_color[-1])
-                #print(bit_color.tobytes())
-                #print(bit_color.to01())
-                #print(int.from_bytes(bit_color.tobytes()))
-                #print("new color: ", bit_color)
-                #print()
-
+            
+                try:
+                    text_bits = bits_arr.tobytes()
+                    text_str = text_bits.decode()
+                    if text_str[-1] == end_char:
+                        print(text_str)
+                        gather_flag = False
+                except: pass
+            i += 1
 
 
 
