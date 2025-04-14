@@ -29,53 +29,44 @@ class Encoder:
         while c < len(bit_text):
             rgb_int_values = image.image.pixelColor(i,i).getRgb()
             rgb_new_int_values = []
-            #print(rgb_int_values)
             for j, color in enumerate(rgb_int_values):
                 bit_color = Encoder._to_bitarr(bytes([color]))
-                #print("bit: ", bit_text[c+j])
-                #print("color: ", bit_color)
                 bit_color[-1] = bit_text[c+j]
                 rgb_new_int_values.append(int.from_bytes(bit_color.tobytes()))
-                #print(bit_color.tobytes())
-                #print(bit_color.to01())
-                #print(int.from_bytes(bit_color.tobytes()))
-                #print("new color: ", bit_color)
-                #print()
             
             new_qcolor = QColor(*tuple(rgb_new_int_values))
             image.image.setPixelColor(i, i, new_qcolor)
-            #print(tuple(rgb_new_int_values))
-            #print()
+
             c += len(rgb_int_values)
             i += 1
 
         image.image.save(image.name+"_crypted."+image.format, quality=100)
 
-        #decrypt test
-
-        coded_image = QImage(image.name+"_crypted."+image.format)
-        max_bits_size = math.floor(math.sqrt((pow(coded_image.width(), 2) + pow(coded_image.height(), 2))))
-        print(coded_image.width(), coded_image.height())
-        
-        gather_flag = True
-
-        i = 0
-        bits_arr = bitarray()
-        while gather_flag:
-            rgb_int_values = coded_image.pixelColor(i,i).getRgb()
-            for j, color in enumerate(rgb_int_values):
-                bit_color = Encoder._to_bitarr(bytes([color]))
-                #bits_arr += str(bit_color[-1])
-                bits_arr.append(bit_color[-1])
-            
-                try:
-                    text_bits = bits_arr.tobytes()
-                    text_str = text_bits.decode()
-                    if text_str[-1] == end_char:
-                        print(text_str)
-                        gather_flag = False
-                except: pass
-            i += 1
+        ##decrypt test
+#
+        #coded_image = QImage(image.name+"_crypted."+image.format)
+        #max_bits_size = math.floor(math.sqrt((pow(coded_image.width(), 2) + pow(coded_image.height(), 2))))
+        #print(coded_image.width(), coded_image.height())
+        #
+        #gather_flag = True
+#
+        #i = 0
+        #bits_arr = bitarray()
+        #while gather_flag:
+        #    rgb_int_values = coded_image.pixelColor(i,i).getRgb()
+        #    for j, color in enumerate(rgb_int_values):
+        #        bit_color = Encoder._to_bitarr(bytes([color]))
+        #        #bits_arr += str(bit_color[-1])
+        #        bits_arr.append(bit_color[-1])
+        #    
+        #        try:
+        #            text_bits = bits_arr.tobytes()
+        #            text_str = text_bits.decode()
+        #            if text_str[-1] == end_char:
+        #                print(text_str)
+        #                gather_flag = False
+        #        except: pass
+        #    i += 1
 
 
 
