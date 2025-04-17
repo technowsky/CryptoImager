@@ -1,12 +1,36 @@
 from bitarray import bitarray
 import hashlib
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
+import math
 
 class Decoder:
 
     @staticmethod
-    def decode(image, password):
-        pass
+    def decode(image, password:str):
+        end_char = "ﬣ"
+        max_bits_size = math.floor(math.sqrt((pow(coded_image.width(), 2) + pow(coded_image.height(), 2))))
+        print(coded_image.width(), coded_image.height())
+        
+        gather_flag = True
+
+        i = 0
+        bits_arr = bitarray()
+        while gather_flag:
+            rgb_int_values = coded_image.pixelColor(i,i).getRgb()
+            for j, color in enumerate(rgb_int_values):
+                bit_color = Encoder._to_bitarr(bytes([color]))
+                #bits_arr += str(bit_color[-1])
+                bits_arr.append(bit_color[-1])
+            
+                try:
+                    text_bits = bits_arr.tobytes()
+                    text_str = text_bits.decode()
+                    if text_str[-1] == end_char:
+                        print(text_str)
+                        gather_flag = False
+                except: pass
+            i += 1
+
     
     @staticmethod
     def decode_multiple(images:list, password:str):

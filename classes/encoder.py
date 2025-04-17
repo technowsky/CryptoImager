@@ -9,12 +9,18 @@ class Encoder:
 
     @staticmethod
     def encode(image, text:str, password:str):
-        #encoding text with password before creating image
         end_char = "ﬣ"
-        text += end_char
-        bit_text = Encoder._to_bitarr(text.encode())
-        print(text)
-        print(bit_text)
+
+        hashed_p = Encoder._pass_to_hash(password)
+        hashed_vi = Encoder._get_VI(password)
+        encoded_text = Encoder._aes_encode_b(hashed_p.encode(), hashed_vi.encode(), text.encode())
+
+        #encoding text with password before creating image
+        encoded_text += end_char.encode()
+        print(encoded_text)
+        print(type(encoded_text))
+        bit_text = Encoder._to_bitarr(encoded_text)
+
 
         max_bits_size = math.floor(math.sqrt((pow(image.image.width(), 2) + pow(image.image.height(), 2))))
         #print(max_bits_size)

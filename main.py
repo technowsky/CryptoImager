@@ -76,17 +76,40 @@ class main_window(QWidget):
 
     def generate_decode_low_layout(self):
         layout = QGridLayout()
-        pass_input = QLineEdit()
-        pin_input = QLineEdit()
-        code_button = QPushButton("Code")
-        imgs_frame = QFrame()
-        output_text = QTextEdit()
 
-        layout.addWidget(pass_input, 0, 0, 1, 2)
-        layout.addWidget(pin_input, 0, 3, 1, 2)
-        layout.addWidget(code_button, 0, 6, 1, 2, Qt.AlignmentFlag.AlignCenter)
-        layout.addWidget(imgs_frame, 1, 0, 5, 5)
-        layout.addWidget(output_text, 1, 6, 5, 3)
+        #pass_input
+        pass_input = QLineEdit()
+        pass_label = QLabel("Password:")
+
+        #image_input
+        img_display = dropArea()
+        #img_display.clicked.connect(select_image)
+        img_display.img = Image("test_imgs/add_image_icon.png")
+        img_display.setPixmap(img_display.img.pixmap.scaledToHeight(250))
+
+        #string_input
+        str_output = QTextEdit()
+        str_output.setReadOnly(True)
+       
+
+
+        code_butt = QPushButton("Decode")
+        code_butt.clicked.connect(lambda: self.decode_password(pass_input, img_display))    #output_label
+        
+
+        child_layout_1 = QHBoxLayout()          #Password input layout
+        child_layout_1.addWidget(pass_label)
+        child_layout_1.addWidget(pass_input)
+
+        layout.addLayout(child_layout_1, 0, 0)
+        layout.addWidget(img_display, 1, 0)
+        layout.addWidget(str_output, 1, 1)
+        layout.addWidget(code_butt, 2,0,1,2)
+
+        layout.setColumnStretch(0,1)
+        layout.setColumnStretch(1,1)
+        print(layout.rowCount(), layout.columnCount())
+
         return layout
 
     def generate_encode_low_layout(self):
@@ -144,14 +167,13 @@ class main_window(QWidget):
     def encode_password(self, pass_wig, text_wig, img_wig):
         text = text_wig.toPlainText()
         password = pass_wig.text()
-        hashed_p = Encoder._pass_to_hash(password)
-        hashed_vi = Encoder._get_VI(password)
-        encoded_text = Encoder._aes_encode_b(hashed_p.encode(), hashed_vi.encode(), text.encode())
-        #print(encoded_text)
-        #print(Encoder._to_bitarr(encoded_text))
-        Encoder.encode(img_wig.img, "test", "test")
-        #print(Decoder._from_bitarr(Encoder._to_bitarr(encoded_text)))
-        #print(Decoder._aes_decode_b(hashed_p.encode(), hashed_vi.encode(), encoded_text))
+
+        Encoder.encode(img_wig.img, text, password)
+
+    def decode_password(self, pass_wig, img_wig):
+        password = pass_wig.text()
+        image = img_wig.img.image
+        Decoder.decode(image, password)
 
 
 if __name__ == "__main__":
