@@ -17,15 +17,15 @@ class Encoder:
 
         #encoding text with password before creating image
         encoded_text += end_char.encode()
-        print(encoded_text)
-        print(type(encoded_text))
+        #print(encoded_text)
+        #print(type(encoded_text))
         bit_text = Encoder._to_bitarr(encoded_text)
 
 
         max_bits_size = math.floor(math.sqrt((pow(image.image.width(), 2) + pow(image.image.height(), 2))))
         #print(max_bits_size)
         #print(len(bit_text))
-        if max_bits_size < len(bit_text):
+        if min(image.image.width(), image.image.height()) < len(bit_text):
             print("Image is not big enough to encode that long text. Select bigger image")
             return False
         

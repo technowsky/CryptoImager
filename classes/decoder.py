@@ -2,11 +2,12 @@ from bitarray import bitarray
 import hashlib
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 import math
+from classes.encoder import *
 
 class Decoder:
 
     @staticmethod
-    def decode(image, password:str):
+    def decode(coded_image, password:str):
         end_char = "ﬣ"
         max_bits_size = math.floor(math.sqrt((pow(coded_image.width(), 2) + pow(coded_image.height(), 2))))
         print(coded_image.width(), coded_image.height())
@@ -15,7 +16,7 @@ class Decoder:
 
         i = 0
         bits_arr = bitarray()
-        while gather_flag:
+        while gather_flag and i < min(coded_image.width(), coded_image.height()):
             rgb_int_values = coded_image.pixelColor(i,i).getRgb()
             for j, color in enumerate(rgb_int_values):
                 bit_color = Encoder._to_bitarr(bytes([color]))
@@ -25,11 +26,14 @@ class Decoder:
                 try:
                     text_bits = bits_arr.tobytes()
                     text_str = text_bits.decode()
+                    #print(text_str)
                     if text_str[-1] == end_char:
-                        print(text_str)
+                        #print(text_str)
                         gather_flag = False
                 except: pass
             i += 1
+
+        print(bits_arr.tobytes())
 
     
     @staticmethod
@@ -58,8 +62,6 @@ class Decoder:
     def _from_bits(data:str) -> bytes:
         data_to_cut = data
         bytes_tab = []
-        print(len(data))
-        print(len(data) % 8 == 0)
         while len(data_to_cut) > 0 and len(data_to_cut) % 8 == 0:
             bytes_tab.append(data_to_cut[:8])
             data_to_cut = data_to_cut[8:]
