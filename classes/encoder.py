@@ -10,6 +10,7 @@ class Encoder:
     @staticmethod
     def encode(image, text:str, password:str):
         end_char = "ﬣ"
+        #print(end_char.encode())
 
         hashed_p = Encoder._pass_to_hash(password)
         hashed_vi = Encoder._get_VI(password)
@@ -21,24 +22,30 @@ class Encoder:
         #print(type(encoded_text))
         bit_text = Encoder._to_bitarr(encoded_text)
 
+        #print(bit_text)
+
 
         max_bits_size = math.floor(math.sqrt((pow(image.image.width(), 2) + pow(image.image.height(), 2))))
         #print(max_bits_size)
         #print(len(bit_text))
-        if min(image.image.width(), image.image.height()) < len(bit_text):
+        if min(image.image.width(), image.image.height())*3 < len(bit_text):
             print("Image is not big enough to encode that long text. Select bigger image")
             return False
         
 
         c = 0
         i = 0
-        while c < len(bit_text):
+        print(bit_text)
+        while c*3 < len(bit_text):
             rgb_int_values = image.image.pixelColor(i,i).getRgb()
             rgb_new_int_values = []
             for j, color in enumerate(rgb_int_values):
                 bit_color = Encoder._to_bitarr(bytes([color]))
+                print(bit_text[c+j])
                 bit_color[-1] = bit_text[c+j]
-                rgb_new_int_values.append(int.from_bytes(bit_color.tobytes()))
+                #rgb_new_int_values.append(int.from_bytes(bit_color.tobytes()))
+                rgb_new_int_values.append(int(bit_color.to01(), 2))
+            print(rgb_int_values, rgb_new_int_values)
             
             new_qcolor = QColor(*tuple(rgb_new_int_values))
             image.image.setPixelColor(i, i, new_qcolor)
@@ -46,7 +53,7 @@ class Encoder:
             c += len(rgb_int_values)
             i += 1
 
-        image.image.save(image.name+"_crypted."+image.format, quality=100)
+        image.image.save(image.name+"_crypted.png", format="PNG", quality=0)
 
         ##decrypt test
 #

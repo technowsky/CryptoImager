@@ -108,7 +108,6 @@ class main_window(QWidget):
 
         layout.setColumnStretch(0,1)
         layout.setColumnStretch(1,1)
-        print(layout.rowCount(), layout.columnCount())
 
         return layout
 

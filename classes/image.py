@@ -6,6 +6,7 @@ class Image:
         self.pixmap = QPixmap(url)
         self.name, self.format = self._get_file_str(url)
         self.image = QImage(url)
+        self.image = self.image.convertToFormat(QImage.Format.Format_RGB888)
         
 
         #print(self.url, self.name, self.format)

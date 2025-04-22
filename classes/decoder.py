@@ -9,8 +9,10 @@ class Decoder:
     @staticmethod
     def decode(coded_image, password:str):
         end_char = "ﬣ"
+        print(end_char.encode())
+
         max_bits_size = math.floor(math.sqrt((pow(coded_image.width(), 2) + pow(coded_image.height(), 2))))
-        print(coded_image.width(), coded_image.height())
+        #print(coded_image.width(), coded_image.height())
         
         gather_flag = True
 
@@ -24,16 +26,14 @@ class Decoder:
                 bits_arr.append(bit_color[-1])
             
                 try:
-                    text_bits = bits_arr.tobytes()
-                    text_str = text_bits.decode()
-                    #print(text_str)
-                    if text_str[-1] == end_char:
-                        #print(text_str)
+                    text_bytes = bits_arr.tobytes()
+                    if end_char in text_bytes:
                         gather_flag = False
                 except: pass
             i += 1
 
         print(bits_arr.tobytes())
+        #print(bits_arr)
 
     
     @staticmethod
