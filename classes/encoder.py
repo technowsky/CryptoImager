@@ -10,18 +10,21 @@ class Encoder:
     @staticmethod
     def encode(image, text:str, password:str):
         end_char = "ﬣ"
+
+        coding_flag = True
         #print(end_char.encode())
 
-        hashed_p = Encoder._pass_to_hash(password)
-        hashed_vi = Encoder._get_VI(password)
-        encoded_text = Encoder._aes_encode_b(hashed_p.encode(), hashed_vi.encode(), text.encode())
+        #hashed_p = Encoder._pass_to_hash(password)
+        #hashed_vi = Encoder._get_VI(password)
+        #encoded_text = Encoder._aes_encode_b(hashed_p.encode(), hashed_vi.encode(), text.encode())
 
         #encoding text with password before creating image
-        encoded_text += end_char.encode()
-        #print(encoded_text)
+        #encoded_text += end_char.encode()
+        encoded_text = text.encode()+end_char.encode()
+        print(encoded_text.decode())
         #print(type(encoded_text))
         bit_text = Encoder._to_bitarr(encoded_text)
-
+        print(len(bit_text))
         #print(bit_text)
 
 
@@ -36,23 +39,33 @@ class Encoder:
         c = 0
         i = 0
         print(bit_text)
-        while c*3 < len(bit_text):
-            rgb_int_values = image.image.pixelColor(i,i).getRgb()
-            rgb_new_int_values = []
-            for j, color in enumerate(rgb_int_values):
+        bits_arr = bitarray()
+
+        while coding_flag:
+            #print(bit_text)
+            rgb_int_values = image.image.pixelColor(i,i).getRgb()[:3]
+            #print(rgb_int_values)
+            rgb_new_int_values = list(rgb_int_values)
+            for j, color in enumerate(rgb_new_int_values):
+                #print(color)
+                #print(type(color))
                 bit_color = Encoder._to_bitarr(bytes([color]))
-                print(bit_text[c+j])
-                bit_color[-1] = bit_text[c+j]
-                #rgb_new_int_values.append(int.from_bytes(bit_color.tobytes()))
-                rgb_new_int_values.append(int(bit_color.to01(), 2))
-            print(rgb_int_values, rgb_new_int_values)
-            
+                #print(bit_text[c+j])
+                bit_color[-1] = bit_text[c]
+                bits_arr.append(bit_text[c])
+                rgb_new_int_values[j] = int(bit_color.to01(), 2)
+                #del bit_text[0]
+                c += 1
+                if c == len(bit_text):
+                    coding_flag = False
+                    break
+                
             new_qcolor = QColor(*tuple(rgb_new_int_values))
             image.image.setPixelColor(i, i, new_qcolor)
 
-            c += len(rgb_int_values)
             i += 1
 
+        print(bits_arr)
         image.image.save(image.name+"_crypted.png", format="PNG", quality=0)
 
         ##decrypt test

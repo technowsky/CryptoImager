@@ -9,30 +9,38 @@ class Decoder:
     @staticmethod
     def decode(coded_image, password:str):
         end_char = "ﬣ"
-        print(end_char.encode())
+        #print(end_char.encode())
 
         max_bits_size = math.floor(math.sqrt((pow(coded_image.width(), 2) + pow(coded_image.height(), 2))))
         #print(coded_image.width(), coded_image.height())
         
         gather_flag = True
 
+
         i = 0
         bits_arr = bitarray()
         while gather_flag and i < min(coded_image.width(), coded_image.height()):
-            rgb_int_values = coded_image.pixelColor(i,i).getRgb()
+        #while len(bits_arr) < 57:
+            rgb_int_values = coded_image.pixelColor(i,i).getRgb()[:3]
+            #print(rgb_int_values)
             for j, color in enumerate(rgb_int_values):
                 bit_color = Encoder._to_bitarr(bytes([color]))
                 #bits_arr += str(bit_color[-1])
                 bits_arr.append(bit_color[-1])
+                #print(bit_color[-1], bit_color[0])
             
                 try:
                     text_bytes = bits_arr.tobytes()
-                    if end_char in text_bytes:
+                    if end_char.encode() in text_bytes:
                         gather_flag = False
+                        print(text_bytes.decode())
+                        break
                 except: pass
-            i += 1
 
-        print(bits_arr.tobytes())
+            i += 1
+        print(bits_arr)
+        try: print((bits_arr.tobytes()).decode())
+        except Exception as e: print(e)
         #print(bits_arr)
 
     
@@ -66,7 +74,7 @@ class Decoder:
             bytes_tab.append(data_to_cut[:8])
             data_to_cut = data_to_cut[8:]
 
-        print(bytes_tab)
+        #print(bytes_tab)
 
         return bytes()
 
