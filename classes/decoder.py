@@ -16,7 +16,6 @@ class Decoder:
         
         gather_flag = True
 
-
         i = 0
         bits_arr = bitarray()
         while gather_flag and i < min(coded_image.width(), coded_image.height()):
@@ -31,9 +30,10 @@ class Decoder:
             
                 try:
                     text_bytes = bits_arr.tobytes()
+                    #print(text_bytes)
                     if end_char.encode() in text_bytes:
                         gather_flag = False
-                        print(text_bytes.decode())
+                        #print(text_bytes.decode())
                         break
                 except: pass
 
@@ -41,6 +41,8 @@ class Decoder:
         print(bits_arr)
         try: print((bits_arr.tobytes()).decode())
         except Exception as e: print(e)
+
+        
         #print(bits_arr)
 
     

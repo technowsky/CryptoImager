@@ -14,17 +14,16 @@ class Encoder:
         coding_flag = True
         #print(end_char.encode())
 
-        #hashed_p = Encoder._pass_to_hash(password)
-        #hashed_vi = Encoder._get_VI(password)
-        #encoded_text = Encoder._aes_encode_b(hashed_p.encode(), hashed_vi.encode(), text.encode())
+        hashed_p = Encoder._pass_to_hash(password)
+        hashed_vi = Encoder._get_VI(password)
+        encoded_text = Encoder._aes_encode_b(hashed_p.encode(), hashed_vi.encode(), text.encode())
 
         #encoding text with password before creating image
-        #encoded_text += end_char.encode()
-        encoded_text = text.encode()+end_char.encode()
-        print(encoded_text.decode())
+        encoded_text += end_char.encode()
+        #print(encoded_text.decode())
         #print(type(encoded_text))
         bit_text = Encoder._to_bitarr(encoded_text)
-        print(len(bit_text))
+        #print(len(bit_text))
         #print(bit_text)
 
 
@@ -38,7 +37,7 @@ class Encoder:
 
         c = 0
         i = 0
-        print(bit_text)
+        #print(bit_text)
         bits_arr = bitarray()
 
         while coding_flag:
@@ -65,7 +64,7 @@ class Encoder:
 
             i += 1
 
-        print(bits_arr)
+        #print(bits_arr)
         image.image.save(image.name+"_crypted.png", format="PNG", quality=0)
 
         ##decrypt test
