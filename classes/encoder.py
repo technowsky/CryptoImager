@@ -64,7 +64,7 @@ class Encoder:
 
             i += 1
 
-        #print(bits_arr)
+        print(bits_arr)
         image.image.save(image.name+"_crypted.png", format="PNG", quality=0)
 
         ##decrypt test

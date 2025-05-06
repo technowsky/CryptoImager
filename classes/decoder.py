@@ -42,6 +42,13 @@ class Decoder:
         try: print((bits_arr.tobytes()).decode())
         except Exception as e: print(e)
 
+
+        encoded_text = Decoder._from_bitarr(bits_arr)
+        encoded_vi = Encoder._get_VI(password).encode()
+        encoded_password = password.encode()
+
+        print(Decoder._aes_decode_b(encoded_password, encoded_vi, encoded_text))
+
         
         #print(bits_arr)
 
