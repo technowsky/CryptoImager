@@ -31,7 +31,7 @@ class Decoder:
                 try:
                     text_bytes = bits_arr.tobytes()
                     #print(text_bytes)
-                    if end_char.encode() in text_bytes:
+                    if end_char.encode() in text_bytes: # Remove end_char after founded
                         gather_flag = False
                         #print(text_bytes.decode())
                         break
@@ -45,7 +45,11 @@ class Decoder:
 
         encoded_text = Decoder._from_bitarr(bits_arr)
         encoded_vi = Encoder._get_VI(password).encode()
-        encoded_password = password.encode()
+        encoded_password = Encoder._pass_to_hash(password).encode()
+
+        print(encoded_text)
+        print(encoded_password)
+        print(encoded_vi)
 
         print(Decoder._aes_decode_b(encoded_password, encoded_vi, encoded_text))
 
@@ -60,6 +64,7 @@ class Decoder:
     @staticmethod
     def _unpad(data:bytes) -> bytes:
         padding_length = data[-1]
+        print(padding_length)
         if padding_length < 1 or padding_length > 16:
             raise ValueError("Invalid padding encountered")
         return data[:-padding_length]
@@ -67,9 +72,12 @@ class Decoder:
     @staticmethod
     def _aes_decode_b(key:bytes, vi:bytes, text:bytes) -> str:
 
+
         cipher = Cipher(algorithms.AES(key), modes.CBC(vi))
         decryptor = cipher.decryptor()
         decoded_text = decryptor.update(text) + decryptor.finalize()
+
+        print(decoded_text)
 
         output_str = Decoder._unpad(decoded_text)
 

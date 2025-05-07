@@ -18,10 +18,17 @@ class Encoder:
         hashed_vi = Encoder._get_VI(password)
         encoded_text = Encoder._aes_encode_b(hashed_p.encode(), hashed_vi.encode(), text.encode())
 
+        
+
         #encoding text with password before creating image
         encoded_text += end_char.encode()
+        encoded_text = Encoder._pad(encoded_text)
         #print(encoded_text.decode())
         #print(type(encoded_text))
+        print(encoded_text)
+        print(hashed_p)
+        print(hashed_vi)
+
         bit_text = Encoder._to_bitarr(encoded_text)
         #print(len(bit_text))
         #print(bit_text)
