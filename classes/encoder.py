@@ -22,7 +22,6 @@ class Encoder:
 
         #encoding text with password before creating image
         encoded_text += end_char.encode()
-        encoded_text = Encoder._pad(encoded_text)
         #print(encoded_text.decode())
         #print(type(encoded_text))
         print(encoded_text)

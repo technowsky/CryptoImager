@@ -9,6 +9,8 @@ class Decoder:
     @staticmethod
     def decode(coded_image, password:str):
         end_char = "ﬣ"
+        end_char_bit_len = len(Encoder._to_bitarr(end_char.encode()))
+        print(end_char_bit_len)
         #print(end_char.encode())
 
         max_bits_size = math.floor(math.sqrt((pow(coded_image.width(), 2) + pow(coded_image.height(), 2))))
@@ -32,7 +34,9 @@ class Decoder:
                     text_bytes = bits_arr.tobytes()
                     #print(text_bytes)
                     if end_char.encode() in text_bytes: # Remove end_char after founded
+                        bits_arr = bits_arr[:-(end_char_bit_len)]
                         gather_flag = False
+
                         #print(text_bytes.decode())
                         break
                 except: pass
