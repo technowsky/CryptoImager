@@ -18,12 +18,6 @@ def main():
     with open("img_bytes.txt", "w") as f:
         f.write(' '.join([format(b, 'b') for b in img_bytes]))
 
-def str_fun():
-    string = [b for b in bytes("testowy string", "UTF-8")]
-    bits = [format(b, 'b') for b in string]
-    print(len(bits), bits)
-    print(len(string), string)
-
 
 class main_window(QWidget):
     def __init__(self):
@@ -94,7 +88,7 @@ class main_window(QWidget):
 
 
         code_butt = QPushButton("Decode")
-        code_butt.clicked.connect(lambda: self.decode_password(pass_input, img_display))    #output_label
+        code_butt.clicked.connect(lambda: self.decode_password(pass_input, img_display, str_output))    #output_label
         
 
         child_layout_1 = QHBoxLayout()          #Password input layout
@@ -169,10 +163,10 @@ class main_window(QWidget):
 
         Encoder.encode(img_wig.img, text, password)
 
-    def decode_password(self, pass_wig, img_wig):
+    def decode_password(self, pass_wig, img_wig, output_wig):
         password = pass_wig.text()
         image = img_wig.img.image
-        Decoder.decode(image, password)
+        output_wig.setText(Decoder.decode(image, password))
 
 
 if __name__ == "__main__":

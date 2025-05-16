@@ -10,7 +10,7 @@ class Decoder:
     def decode(coded_image, password:str):
         end_char = "ﬣ"
         end_char_bit_len = len(Encoder._to_bitarr(end_char.encode()))
-        print(end_char_bit_len)
+        #print(end_char_bit_len)
         #print(end_char.encode())
 
         max_bits_size = math.floor(math.sqrt((pow(coded_image.width(), 2) + pow(coded_image.height(), 2))))
@@ -42,21 +42,22 @@ class Decoder:
                 except: pass
 
             i += 1
-        print(bits_arr)
-        try: print((bits_arr.tobytes()).decode())
-        except Exception as e: print(e)
+        #print(bits_arr)
+        #try: print((bits_arr.tobytes()).decode())
+        #except Exception as e: print(e)
 
 
         encoded_text = Decoder._from_bitarr(bits_arr)
         encoded_vi = Encoder._get_VI(password).encode()
         encoded_password = Encoder._pass_to_hash(password).encode()
 
-        print(encoded_text)
-        print(encoded_password)
-        print(encoded_vi)
+        #print(encoded_text)
+        #print(encoded_password)
+        #print(encoded_vi)
+#
+        #print(Decoder._aes_decode_b(encoded_password, encoded_vi, encoded_text))
 
-        print(Decoder._aes_decode_b(encoded_password, encoded_vi, encoded_text))
-
+        return Decoder._aes_decode_b(encoded_password, encoded_vi, encoded_text)
         
         #print(bits_arr)
 
@@ -68,7 +69,7 @@ class Decoder:
     @staticmethod
     def _unpad(data:bytes) -> bytes:
         padding_length = data[-1]
-        print(padding_length)
+        #print(padding_length)
         if padding_length < 1 or padding_length > 16:
             raise ValueError("Invalid padding encountered")
         return data[:-padding_length]
@@ -81,7 +82,7 @@ class Decoder:
         decryptor = cipher.decryptor()
         decoded_text = decryptor.update(text) + decryptor.finalize()
 
-        print(decoded_text)
+        #print(decoded_text)
 
         output_str = Decoder._unpad(decoded_text)
 

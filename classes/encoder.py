@@ -24,9 +24,9 @@ class Encoder:
         encoded_text += end_char.encode()
         #print(encoded_text.decode())
         #print(type(encoded_text))
-        print(encoded_text)
-        print(hashed_p)
-        print(hashed_vi)
+        #print(encoded_text)
+        #print(hashed_p)
+        #print(hashed_vi)
 
         bit_text = Encoder._to_bitarr(encoded_text)
         #print(len(bit_text))
@@ -70,47 +70,8 @@ class Encoder:
 
             i += 1
 
-        print(bits_arr)
+        #print(bits_arr)
         image.image.save(image.name+"_crypted.png", format="PNG", quality=0)
-
-        ##decrypt test
-#
-        #coded_image = QImage(image.name+"_crypted."+image.format)
-        #max_bits_size = math.floor(math.sqrt((pow(coded_image.width(), 2) + pow(coded_image.height(), 2))))
-        #print(coded_image.width(), coded_image.height())
-        #
-        #gather_flag = True
-#
-        #i = 0
-        #bits_arr = bitarray()
-        #while gather_flag:
-        #    rgb_int_values = coded_image.pixelColor(i,i).getRgb()
-        #    for j, color in enumerate(rgb_int_values):
-        #        bit_color = Encoder._to_bitarr(bytes([color]))
-        #        #bits_arr += str(bit_color[-1])
-        #        bits_arr.append(bit_color[-1])
-        #    
-        #        try:
-        #            text_bits = bits_arr.tobytes()
-        #            text_str = text_bits.decode()
-        #            if text_str[-1] == end_char:
-        #                print(text_str)
-        #                gather_flag = False
-        #        except: pass
-        #    i += 1
-
-
-
-
-
-
-
-        
-        #rgb_int_values = image.pixelColor(0,0).getRgb()
-        #print(rgb_int_values)
-        #
-        #print(rgb_bit_values)
-
     
     @staticmethod
     def encode_multiple(images:list, texts:list, password:str):
