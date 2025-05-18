@@ -18,7 +18,6 @@ class Encoder:
         hashed_vi = Encoder._get_VI(password)
         encoded_text = Encoder._aes_encode_b(hashed_p.encode(), hashed_vi.encode(), text.encode())
 
-        
 
         #encoding text with password before creating image
         encoded_text += end_char.encode()

@@ -168,7 +168,6 @@ class main_window(QWidget):
         image = img_wig.img.image
         output_wig.setText(Decoder.decode(image, password))
 
-
 if __name__ == "__main__":
     #main()
     app = QApplication([])
