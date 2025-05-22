@@ -7,6 +7,7 @@ from classes.encoder import *
 from classes.decoder import *
 from classes.widgets.dropArea import *
 from classes.image import *
+from classes.widgets.save_to_file import *
 
 
 def main():
@@ -160,7 +161,7 @@ class main_window(QWidget):
     def encode_password(self, pass_wig, text_wig, img_wig):
         text = text_wig.toPlainText()
         password = pass_wig.text()
-
+        
         Encoder.encode(img_wig.img, text, password)
 
     def decode_password(self, pass_wig, img_wig, output_wig):
@@ -172,6 +173,7 @@ if __name__ == "__main__":
     #main()
     app = QApplication([])
     widget = main_window()
+    fd = file_dialog()
     widget.show()
 
     sys.exit(app.exec())
