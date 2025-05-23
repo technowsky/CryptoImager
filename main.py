@@ -8,6 +8,7 @@ from classes.decoder import *
 from classes.widgets.dropArea import *
 from classes.image import *
 from classes.widgets.save_to_file import *
+from classes.widgets.settingsWin import *
 
 
 def main():
@@ -44,6 +45,10 @@ class main_window(QWidget):
         self.encode_tab_butt.setStyleSheet(self.active_tab_css)
         self.space = QSpacerItem(int(self.width/2), 50)
 
+        self.setting_butt = QPushButton("Setting")
+
+        self.setting_butt.clicked.connect(lambda:setting_window())
+
         self.encode_tab_butt.clicked.connect(self.encode_tab)
         self.decode_tab_butt.clicked.connect(self.decode_tab)
 
@@ -53,6 +58,8 @@ class main_window(QWidget):
         self.tab_layout.addWidget(self.encode_tab_butt)
         self.tab_layout.addWidget(self.decode_tab_butt)
         self.tab_layout.addSpacerItem(self.space)
+        self.tab_layout.addWidget(self.setting_butt, alignment=Qt.AlignmentFlag.AlignRight)
+        
 
 
         self.lower_layout = QStackedWidget()
@@ -174,7 +181,7 @@ if __name__ == "__main__":
     app = QApplication([])
     widget = main_window()
     fd = file_dialog()
-    widget.show()
+    #widget.show()
 
     sys.exit(app.exec())
 
