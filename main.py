@@ -1,4 +1,3 @@
-from PIL import Image
 from PyQt6.QtWidgets import QWidget, QApplication, QGridLayout, QPushButton, QVBoxLayout, QHBoxLayout, QLabel, QFrame, QSpacerItem, QLineEdit, QTextEdit, QStackedWidget
 from PyQt6.QtGui import QScreen, QPixmap
 from PyQt6.QtCore import Qt, QRect
@@ -34,6 +33,7 @@ class main_window(QWidget):
         self.x = self.screen_rect[0].geometry().center().x()-int(self.width/2) if len(self.screen_rect) == 1 else 0
         self.y = self.screen_rect[0].geometry().center().y()-int(self.height/2) if len(self.screen_rect) == 1 else 0
         self.setGeometry(self.x,self.y,self.width,self.height)
+        self.setting_win = setting_window()
 
         self.active_tab_css = "QPushButton{ height:50px;  width:100%; background-color:white;}"
         self.inactive_tab_css = "QPushButton{ height:50px;  width:100%; background-color: rgb(94, 94, 94);}"
@@ -47,7 +47,7 @@ class main_window(QWidget):
 
         self.setting_butt = QPushButton("Setting")
 
-        self.setting_butt.clicked.connect(lambda:setting_window())
+        self.setting_butt.clicked.connect(lambda:self.setting_win.show())
 
         self.encode_tab_butt.clicked.connect(self.encode_tab)
         self.decode_tab_butt.clicked.connect(self.decode_tab)
@@ -180,8 +180,8 @@ if __name__ == "__main__":
     #main()
     app = QApplication([])
     widget = main_window()
-    fd = file_dialog()
-    #widget.show()
+    #fd = file_dialog()
+    widget.show()
 
     sys.exit(app.exec())
 
