@@ -10,15 +10,6 @@ from classes.widgets.save_to_file import *
 from classes.widgets.settingsWin import *
 
 
-def main():
-    img = Image.open("test_imgs/1.jpg")
-    img_size = img.size
-    #img.show()
-    img_bytes = img.tobytes()
-
-    with open("img_bytes.txt", "w") as f:
-        f.write(' '.join([format(b, 'b') for b in img_bytes]))
-
 
 class main_window(QWidget):
     def __init__(self):
