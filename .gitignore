@@ -173,3 +173,7 @@ cython_debug/
 *.png
 *.jpg
 *.jpeg
+
+# Excluded
+settings.json
+setting.json
