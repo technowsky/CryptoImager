@@ -1,26 +1,12 @@
 from PyQt6.QtWidgets import QWidget, QFileDialog, QPushButton, QLineEdit, QHBoxLayout, QLabel, QVBoxLayout, QComboBox
 from PyQt6.QtCore import Qt
-import json
-
+from pathlib import Path
+import json, os
+from .. import settingManager
 
 class setting_window(QWidget):
     def __init__(self):
         super().__init__()
-
-        self.settings_path = "settings.json"
-
-        try:
-            with open(self.settings_path, "r") as f:
-                self.json_settings = json.load(f)
-        except:
-            self.json_settings = {
-                "save_dir": "./",
-                "coding_method": 0,  # 0 - diagonal, 1 - From first to last, 2 - "Random", 3 - "Spiral from center"
-                "save_custom_name": 1, # 0 - global, 1 - Ask every time, 2 - Same as selected image
-                "save_prefix": ""
-            }
-            with open(self.settings_path, "w") as f:
-                json.dump(self.json_settings, f)
 
 
         self.setFixedSize(700, 500)
@@ -32,20 +18,20 @@ class setting_window(QWidget):
 
         self.save_dir_input = QLineEdit()
         self.save_dir_input.setReadOnly(True)
-        self.save_dir_input.setText(self.json_settings["save_dir"])
+        self.save_dir_input.setText(settingManager.get_setting("save_dir"))
 
         self.coding_method_select = QComboBox()
         self.coding_method_select.addItems(["Diagonal", "From first to last", "Random", "Spiral from center"])
-        self.coding_method_select.setCurrentIndex(self.json_settings["coding_method"])
+        self.coding_method_select.setCurrentIndex(settingManager.get_setting("coding_method"))
 
         self.save_custom_name_input = QComboBox()
         self.save_custom_name_input.addItems(["Global", "Ask every time", "Same as selected image"])
-        self.save_custom_name_input.setCurrentIndex(self.json_settings["save_custom_name"])
+        self.save_custom_name_input.setCurrentIndex(settingManager.get_setting("save_custom_name"))
         self.save_custom_name_input.activated.connect(self.display_prefix)
 
 
         self.save_prefix_input = QLineEdit()
-        self.save_prefix_input.setText(self.json_settings["save_prefix"])
+        self.save_prefix_input.setText(settingManager.get_setting("save_prefix"))
 
         self.save_button = QPushButton("Save")
         self.select_dir_button = QPushButton("Select path")
@@ -86,41 +72,37 @@ class setting_window(QWidget):
 
         self.setLayout(self.layout)
 
-def save_settings(self):
-     self.json_settings["save_dir"] = self.save_dir_input.text()
-     self.json_settings["coding_method"] = self.coding_method_select.currentIndex()
-    self.json_settings["save_custom_name"] = self.save_custom_name_input.currentIndex()
-     self.json_settings["save_prefix"] = self.save_prefix_input.text()
-     
-     try:
-         with open(self.settings_path, "w") as f:
-             json.dump(self.json_settings, f)
-    except Exception as e:
-        print(f"Error saving settings: {e}")
+    def save_settings(self):
 
-     self.close()
+        settingManager.set_setting("save_dir", self.save_dir_input.text())
+        settingManager.set_setting("coding_method", self.coding_method_select.currentIndex())
+        settingManager.set_setting("save_custom_name", self.save_custom_name_input.currentIndex())
+        settingManager.set_setting("save_prefix", self.save_prefix_input.text())
+        
+        settingManager.save_settings()
+
+        self.close()
 
 
     def display_prefix(self):
-        self.json_settings["save_custom_name"] = self.save_custom_name_input.currentIndex()
-        if self.json_settings["save_custom_name"] != 0:
+        settingManager.set_setting("save_custom_name", self.save_custom_name_input.currentIndex())
+        if settingManager.get_setting("save_custom_name") != 0:
             self.save_prefix_label.hide()
             self.save_prefix_input.hide()
         else:
             self.save_prefix_label.show()
             self.save_prefix_input.show()
-from pathlib import Path
 
- def select_saving_path(self):
-     fd = QFileDialog()
-    selected_path = fd.getExistingDirectory()
-    if selected_path:
-        path = str(Path(selected_path)) + os.sep
-    else:
-        path = self.json_settings["save_dir"]
-        
-     self.save_dir_input.setText(path)
-     self.json_settings["save_dir"] = path
+    def select_saving_path(self):
+        fd = QFileDialog()
+        selected_path = fd.getExistingDirectory()
+        if selected_path:
+            path = str(Path(selected_path)) + os.sep
+        else:
+            path = settingManager.get_setting("save_dir")
+            
+        self.save_dir_input.setText(path)
+        settingManager.set_setting("save_dir", path)
 
 
 

@@ -17,7 +17,7 @@ def save_settings():
     global current_json_settings
     try:
         with open(SETTINGS_PATH, "w", encoding="utf-8") as f:
-                json.dump(current_json_settings, f)
+            json.dump(current_json_settings, f)
     except (IOError, PermissionError):
             print("Saving/Loading settings.json file failed due to permission error. Check creating file permissions.")
 
@@ -37,15 +37,19 @@ def validate_settings():
     ...
     #for future validation of data in settings.json. Comperes setting.json data to  DEFAULT_JSON_SETTINGS
 
-def get(key:str):
+def display_settings():
+    setting_keys = list(current_json_settings.keys())
+    for setting_name in setting_keys:
+        print(f"{setting_name} : {current_json_settings.get(setting_name)}")
+
+def get_setting(key:str):
     if key not in current_json_settings:
         raise KeyError(f"{key} not found")
     return current_json_settings[key]
 
-def set(key:str, value):
+def set_setting(key:str, value):
     if key not in current_json_settings:
         raise KeyError(f"{key} not found")
     current_json_settings[key] = value
-
 
 load_settings()     

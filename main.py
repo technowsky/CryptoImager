@@ -6,8 +6,8 @@ from classes.encoder import *
 from classes.decoder import *
 from classes.widgets.dropArea import *
 from classes.image import *
-from classes.widgets.save_to_file import *
 from classes.widgets.settingsWin import *
+from classes import settingManager
 
 
 
@@ -38,7 +38,7 @@ class main_window(QWidget):
 
         self.setting_butt = QPushButton("Setting")
 
-        self.setting_butt.clicked.connect(lambda:self.setting_win.show())
+        self.setting_butt.clicked.connect(self._app_settings)
 
         self.encode_tab_butt.clicked.connect(self.encode_tab)
         self.decode_tab_butt.clicked.connect(self.decode_tab)
@@ -166,6 +166,10 @@ class main_window(QWidget):
         password = pass_wig.text()
         image = img_wig.img.image
         output_wig.setText(Decoder.decode(image, password))
+
+    def _app_settings(self):
+        self.setting_win.show()
+        settingManager.display_settings()
 
 if __name__ == "__main__":
     #main()
