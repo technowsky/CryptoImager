@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import QWidget, QFileDialog, QPushButton, QLineEdit, QHBoxLayout, QLabel, QVBoxLayout, QComboBox
 from PyQt6.QtCore import Qt
 from pathlib import Path
-import json, os
+import os
 from .. import settingManager
 
 class setting_window(QWidget):
@@ -97,7 +97,7 @@ class setting_window(QWidget):
         fd = QFileDialog()
         selected_path = fd.getExistingDirectory()
         if selected_path:
-            path = str(Path(selected_path)) + os.sep
+            path = str(Path(selected_path).resolve()) + os.sep if "/" not in selected_path or "\\" not in selected_path else str(Path(selected_path).resolve())
         else:
             path = settingManager.get_setting("save_dir")
             

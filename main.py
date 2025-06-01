@@ -169,7 +169,6 @@ class main_window(QWidget):
 
     def _app_settings(self):
         self.setting_win.show()
-        settingManager.display_settings()
 
 if __name__ == "__main__":
     #main()

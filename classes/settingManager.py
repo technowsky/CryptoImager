@@ -14,7 +14,6 @@ DEFAULT_JSON_SETTINGS = {                                           #defult data
 current_json_settings = DEFAULT_JSON_SETTINGS.copy()
 
 def save_settings():
-    global current_json_settings
     try:
         with open(SETTINGS_PATH, "w", encoding="utf-8") as f:
             json.dump(current_json_settings, f)
@@ -52,4 +51,4 @@ def set_setting(key:str, value):
         raise KeyError(f"{key} not found")
     current_json_settings[key] = value
 
-load_settings()     
+load_settings()

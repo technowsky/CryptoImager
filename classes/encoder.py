@@ -1,14 +1,18 @@
 from bitarray import bitarray
 import hashlib
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
-from PyQt6.QtGui import QPixmap, QImage, QColor
+from PyQt6.QtGui import QColor
+from PyQt6.QtCore import Qt, QEventLoop
 from classes.image import Image
 import math
+from classes import settingManager
+from classes.widgets.askForName import askWin
+
 
 class Encoder:
 
     @staticmethod
-    def encode(image, text:str, password:str):
+    def encode(image:Image, text:str, password:str):
         end_char = "ﬣ"
 
         coding_flag = True
@@ -70,7 +74,7 @@ class Encoder:
             i += 1
 
         #print(bits_arr)
-        image.image.save(image.name+"_crypted.png", format="PNG", quality=0)
+        Encoder._save_image(image)
     
     @staticmethod
     def encode_multiple(images:list, texts:list, password:str):
@@ -136,3 +140,19 @@ class Encoder:
         ba = bitarray()
         ba.frombytes(data)
         return ba
+    
+    @staticmethod
+    def _save_image(image):
+        encoded_image_name = image.name+"."+image.format
+
+        if settingManager.current_json_settings.get("save_custom_name") == 0:    #global
+            encoded_image_name = settingManager.current_json_settings.get("save_prefix")+"_"+encoded_image_name
+        elif settingManager.current_json_settings.get("save_custom_name") == 1:  #ask every time
+            ask_window = askWin()
+            ask_window.exec()
+            print(ask_window.name_input_text)
+            encoded_image_name = ask_window.name_input_text+"."+image.format
+
+
+        print(settingManager.current_json_settings.get("save_dir")+encoded_image_name)
+        image.image.save(settingManager.current_json_settings.get("save_dir")+encoded_image_name, quality=0)
