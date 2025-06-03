@@ -25,7 +25,7 @@ class setting_window(QWidget):
         self.coding_method_select.setCurrentIndex(settingManager.get_setting("coding_method"))
 
         self.save_custom_name_input = QComboBox()
-        self.save_custom_name_input.addItems(["Global", "Ask every time", "Same as selected image"])
+        self.save_custom_name_input.addItems(["Global", "Ask every time", "Same as selected image (Overwrites a image!)"])
         self.save_custom_name_input.setCurrentIndex(settingManager.get_setting("save_custom_name"))
         self.save_custom_name_input.activated.connect(self.display_prefix)
 

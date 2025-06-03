@@ -15,7 +15,7 @@ class Encoder:
     def encode(image:Image, text:str, password:str):
         end_char = "ﬣ"
 
-        coding_flag = True
+        
         #print(end_char.encode())
 
         hashed_p = Encoder._pass_to_hash(password)
@@ -36,43 +36,7 @@ class Encoder:
         #print(bit_text)
 
 
-        max_bits_size = math.floor(math.sqrt((pow(image.image.width(), 2) + pow(image.image.height(), 2))))
-        #print(max_bits_size)
-        #print(len(bit_text))
-        if min(image.image.width(), image.image.height())*3 < len(bit_text):
-            print("Image is not big enough to encode that long text. Select bigger image")
-            return False
-        
-
-        c = 0
-        i = 0
-        #print(bit_text)
-        bits_arr = bitarray()
-
-        while coding_flag:
-            #print(bit_text)
-            rgb_int_values = image.image.pixelColor(i,i).getRgb()[:3]
-            #print(rgb_int_values)
-            rgb_new_int_values = list(rgb_int_values)
-            for j, color in enumerate(rgb_new_int_values):
-                #print(color)
-                #print(type(color))
-                bit_color = Encoder._to_bitarr(bytes([color]))
-                #print(bit_text[c+j])
-                bit_color[-1] = bit_text[c]
-                bits_arr.append(bit_text[c])
-                rgb_new_int_values[j] = int(bit_color.to01(), 2)
-                #del bit_text[0]
-                c += 1
-                if c == len(bit_text):
-                    coding_flag = False
-                    break
-                
-            new_qcolor = QColor(*tuple(rgb_new_int_values))
-            image.image.setPixelColor(i, i, new_qcolor)
-
-            i += 1
-
+        image = Encoder._code_diagonaly(image, bit_text)
         #print(bits_arr)
         Encoder._save_image(image)
     
@@ -142,7 +106,7 @@ class Encoder:
         return ba
     
     @staticmethod
-    def _save_image(image):
+    def _save_image(image: Image) -> None: 
         encoded_image_name = image.name+"."+image.format
 
         if settingManager.current_json_settings.get("save_custom_name") == 0:    #global
@@ -156,3 +120,84 @@ class Encoder:
 
         print(settingManager.current_json_settings.get("save_dir")+encoded_image_name)
         image.image.save(settingManager.current_json_settings.get("save_dir")+encoded_image_name, quality=0)
+
+    @staticmethod
+    def _code_diagonaly(image: Image, bit_text: bitarray) -> Image:
+        coding_flag = True
+
+        if min(image.image.width(), image.image.height())*3 < len(bit_text):
+            print("Image is not big enough to encode that long text. Select bigger image")
+            return False
+        
+
+        c = 0
+        i = 0
+        #print(bit_text)
+        bits_arr = bitarray()
+
+        while coding_flag:
+            #print(bit_text)
+            rgb_int_values = image.image.pixelColor(i,i).getRgb()[:3]
+            #print(rgb_int_values)
+            rgb_new_int_values = list(rgb_int_values)
+            for j, color in enumerate(rgb_new_int_values):
+                #print(color)
+                #print(type(color))
+                bit_color = Encoder._to_bitarr(bytes([color]))
+                #print(bit_text[c+j])
+                bit_color[-1] = bit_text[c]
+                bits_arr.append(bit_text[c])
+                rgb_new_int_values[j] = int(bit_color.to01(), 2)
+                #del bit_text[0]
+                c += 1
+                if c == len(bit_text):
+                    coding_flag = False
+                    break
+                
+            new_qcolor = QColor(*tuple(rgb_new_int_values))
+            image.image.setPixelColor(i, i, new_qcolor)
+
+            i += 1
+
+        return image
+    
+
+    @staticmethod
+    def _code_first_to_last(image: Image, bit_text: bitarray) -> Image: # have to create first to last coding function
+        coding_flag = True
+
+        if (image.image.width()*image.image.height())*3 < len(bit_text):
+            print("Image is not big enough to encode that long text. Select bigger image")
+            return False
+        
+
+        c = 0
+        i = 0
+        #print(bit_text)
+        bits_arr = bitarray()
+
+        while coding_flag:
+            #print(bit_text)
+            rgb_int_values = image.image.pixelColor(i,i).getRgb()[:3]
+            #print(rgb_int_values)
+            rgb_new_int_values = list(rgb_int_values)
+            for j, color in enumerate(rgb_new_int_values):
+                #print(color)
+                #print(type(color))
+                bit_color = Encoder._to_bitarr(bytes([color]))
+                #print(bit_text[c+j])
+                bit_color[-1] = bit_text[c]
+                bits_arr.append(bit_text[c])
+                rgb_new_int_values[j] = int(bit_color.to01(), 2)
+                #del bit_text[0]
+                c += 1
+                if c == len(bit_text):
+                    coding_flag = False
+                    break
+                
+            new_qcolor = QColor(*tuple(rgb_new_int_values))
+            image.image.setPixelColor(i, i, new_qcolor)
+
+            i += 1
+
+        return image
