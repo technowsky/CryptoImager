@@ -7,6 +7,7 @@ from classes.image import Image
 import math
 from classes import settingManager
 from classes.widgets.askForName import askWin
+from classes import settingManager
 
 
 class Encoder:
@@ -34,11 +35,19 @@ class Encoder:
         bit_text = Encoder._to_bitarr(encoded_text)
         #print(len(bit_text))
         #print(bit_text)
+        code_number = settingManager.get_setting("coding_method")
+        
+        c_image = None
+
+        if(code_number == 0): c_image = Encoder._code_diagonaly(image, bit_text)
+        elif(code_number == 1): c_image = Encoder._code_first_to_last(image, bit_text)
+        elif(code_number == 2): ...
 
 
-        image = Encoder._code_diagonaly(image, bit_text)
+
+
         #print(bits_arr)
-        Encoder._save_image(image)
+        Encoder._save_image(c_image)
     
     @staticmethod
     def encode_multiple(images:list, texts:list, password:str):
@@ -114,12 +123,9 @@ class Encoder:
         elif settingManager.current_json_settings.get("save_custom_name") == 1:  #ask every time
             ask_window = askWin()
             ask_window.exec()
-            print(ask_window.name_input_text)
             encoded_image_name = ask_window.name_input_text+"."+image.format
 
-
-        print(settingManager.current_json_settings.get("save_dir")+encoded_image_name)
-        image.image.save(settingManager.current_json_settings.get("save_dir")+encoded_image_name, quality=0)
+        image.image.save(settingManager.current_json_settings.get("save_dir")+encoded_image_name, quality=100)
 
     @staticmethod
     def _code_diagonaly(image: Image, bit_text: bitarray) -> Image:
@@ -172,13 +178,15 @@ class Encoder:
         
 
         c = 0
-        i = 0
+
+        row = 0
+        column = 0
         #print(bit_text)
         bits_arr = bitarray()
 
         while coding_flag:
             #print(bit_text)
-            rgb_int_values = image.image.pixelColor(i,i).getRgb()[:3]
+            rgb_int_values = image.image.pixelColor(row,column).getRgb()[:3]
             #print(rgb_int_values)
             rgb_new_int_values = list(rgb_int_values)
             for j, color in enumerate(rgb_new_int_values):
@@ -196,8 +204,13 @@ class Encoder:
                     break
                 
             new_qcolor = QColor(*tuple(rgb_new_int_values))
-            image.image.setPixelColor(i, i, new_qcolor)
+            image.image.setPixelColor(row, column, new_qcolor)
 
-            i += 1
+            
+            if(column == image.image.width()):
+                column = 0
+                row += 1
+            else: column += 1 
+
 
         return image
